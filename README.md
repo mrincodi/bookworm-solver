@@ -1,4 +1,8 @@
 # bookworm-solver
+Video: https://github.com/mrincodi/bookworm-solver
+https://www.youtube.com/watch?v=R09e4ltUWew
+
+Still very much incomplete!!
 
 There is a game called Bookworm (https://en.wikipedia.org/wiki/Bookworm_(video_game), https://kbhgames.com/game/bookworm-online). The game is about finding out the longest contiguous words in English on a board full of letters. My solution reads the screen, finds out the longest word and clicks the screen in the right places as to form that word.
  
