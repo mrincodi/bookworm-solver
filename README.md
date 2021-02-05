@@ -1,5 +1,5 @@
 # bookworm-solver
-Video: https://github.com/mrincodi/bookworm-solver
+Video:
 https://www.youtube.com/watch?v=R09e4ltUWew
 
 Still very much incomplete!!
