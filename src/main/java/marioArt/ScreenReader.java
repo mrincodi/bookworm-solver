@@ -18,7 +18,11 @@ public class ScreenReader {
 	static String WORK_DIR = "/Users/mario.rincon/src/personal/bookworm-solver/src/main/resources/";
 	static String IMAGE_PATH = WORK_DIR + "img/";
 	static String LETTERS_IMAGE_PATH = IMAGE_PATH + "letters/";
-	static String DICTIONARY_PATH = WORK_DIR + "engmix.txt";
+	static String DICTIONARY_PATH = WORK_DIR + "usa.txt";
+
+	static Screen s = new Screen();
+	static int XStart = 0;
+	static int YStart = 0;
 
 	public static void takePictures() throws FindFailed, InterruptedException, IOException {
 
@@ -29,13 +33,16 @@ public class ScreenReader {
 		// Look for the bookworm logo.
 		String logo = IMAGE_PATH + "bw.png";
 		Location l = s.find(logo).getTarget();
+		
 		int x = l.getX();
 		int y = l.getY();
 
 		// Move to the first letter.
 		x += BOOKWORM_LOGO_WIDTH_HALF;
 		y += BOOKWORM_LOGO_HEIGHT_HALF;
-		int x_start = x;
+
+		XStart = x;
+		YStart = y;
 
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 7; j++) {
@@ -61,7 +68,7 @@ public class ScreenReader {
 				y += sign * SQUARE_HALF;
 			}
 			y += SQUARE_SIDE + SQUARE_HALF;
-			x = x_start;
+			x = XStart;
 		}
 
 	}
@@ -69,50 +76,78 @@ public class ScreenReader {
 	public static void play() throws FindFailed, InterruptedException, IOException {
 		ArrayList<String> mapAL = getLetters();
 
+		// TODO: This only transforms from AL to char array.
 		// Put all this dance inside LettersMap.
-		char [][] map = new char [8][7];
-		
-		for ( int row = 0; row < 7; row++) {
+		char[][] map = new char[8][7];
+
+		for (int row = 0; row < 7; row++) {
 			String thisLine = mapAL.get(row);
 			int col = 0;
-			for ( char c: thisLine.toCharArray()) {
-				map [row][col]=c;
+			for (char c : thisLine.toCharArray()) {
+				map[row][col] = c;
 				col++;
 			}
 		}
-		map[7][1]= mapAL.get(7).charAt(0);
-		map[7][3]= mapAL.get(7).charAt(1);
-		map[7][5]= mapAL.get(7).charAt(2);
-		
+		map[7][1] = mapAL.get(7).charAt(0);
+		map[7][3] = mapAL.get(7).charAt(1);
+		map[7][5] = mapAL.get(7).charAt(2);
+
 		for (String line : mapAL) {
 			System.out.println(line);
 		}
-		
+
 		GranTrie g = new GranTrie(DICTIONARY_PATH);
-		LettersMap m = new LettersMap (map);
-		ArrayList<String> results = g.giveResults(m,g);
-		Misc.showResultsInNiceFormat(results);
+		LettersMap m = new LettersMap(map);
+		ArrayList<String> results = g.giveResults(m, g);
+		ArrayList<String> resultsSorted = Misc.sortBySize(results);
+		multiClick(resultsSorted.get(resultsSorted.size() - 1));
+	}
+
+	private static void multiClick(String coordinates) throws FindFailed {
+		// TODO Auto-generated method stub
+		System.out.println ("THIS: " + coordinates);
+		
+		for (String coord_word:  coordinates.split(",")){
+			int row = coord_word.charAt(0) - '0';
+			int col = coord_word.charAt(2) - '0';	
+			
+			// Lets find the position.,
+			int x = XStart + col * SQUARE_SIDE;
+			int y = YStart + row * SQUARE_SIDE;
+			if (col % 2 == 1) {
+				y -= SQUARE_HALF;
+			}
+			Location l = new Location ( x, y);
+			//Screen s2 = new Screen ();
+			s.click(l);
+			
+			System.out.println (x + ", " + y + "Wat...?");
+		}
+		
 	}
 
 	public static ArrayList<String> getLetters() throws FindFailed, InterruptedException, IOException {
 
 		ArrayList<String> result = new ArrayList<String>();
 
-		Screen s = new Screen();
+		// Screen s = new Screen();
 
 		System.out.println("Reading the letters!!");
 
 		// Look for the bookworm logo.
 		String logo = IMAGE_PATH + "bw.png";
 		Location l = s.find(logo).getTarget();
+		s.click(l); // To get the focus.
+		
 		int x = l.getX();
 		int y = l.getY();
 
 		// Move to the first letter.
 		x += BOOKWORM_LOGO_WIDTH_HALF;
 		y += BOOKWORM_LOGO_HEIGHT_HALF;
-		int x_start = x;
-		int y_start = y;
+		
+		XStart = x;
+		YStart = y;
 
 		for (int i = 0; i < 7; i++) {
 			String thisLine = "";
@@ -140,14 +175,14 @@ public class ScreenReader {
 				y += sign * SQUARE_HALF;
 			}
 			y += SQUARE_SIDE + SQUARE_HALF;
-			x = x_start;
+			x = XStart;
 			result.add(thisLine);
 		}
 
 		// Now, get the last 3 letters.
 
-		x = x_start + SQUARE_SIDE;
-		y = y_start + SQUARE_SIDE * 6 + SQUARE_HALF;
+		x = XStart + SQUARE_SIDE;
+		y = YStart + SQUARE_SIDE * 6 + SQUARE_HALF;
 		String thisLine = "";
 		for (int j = 0; j < 3; j++) {
 			Region reg = new Region(x - SQUARE_HALF, y - SQUARE_HALF, SQUARE_SIDE - 2, SQUARE_SIDE - 2);

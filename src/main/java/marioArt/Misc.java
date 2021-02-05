@@ -1,4 +1,5 @@
 package marioArt;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -20,23 +21,29 @@ class StringLengthComparator implements Comparator<String> {
 	}
 }
 
-
 public class Misc {
 
-	public static void showResultsInNiceFormat ( ArrayList< String > words){
-		sortBySize (words);
-	}
+	public static ArrayList<String> sortBySize(ArrayList<String> words) {
 
-	public static void sortBySize ( ArrayList< String > words){
+		ArrayList<String> result = new ArrayList<String>();
 		Comparator<String> comparator = new StringLengthComparator();
-		PriorityQueue<String> heap = new PriorityQueue<String>(100,comparator);
-		for ( String w: words){
+		PriorityQueue<String> heap = new PriorityQueue<String>(100, comparator);
+		for (String w : words) {
 			heap.add(w);
 		}
-		while (heap.size() > 0 ){
-			System.out.println(heap.remove());
+		while (heap.size() > 0) {
+			result.add(heap.remove());
 		}
 
+		return result;
+
+	}
+
+	public static void showResultsInNiceFormat(ArrayList<String> words) {
+		ArrayList<String> result = sortBySize(words);
+		for (String w : result) {
+			System.out.println(w);
+		}
 	}
 
 }
