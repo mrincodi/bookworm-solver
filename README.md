@@ -5,8 +5,8 @@ https://www.youtube.com/watch?v=R09e4ltUWew
 Still very much incomplete!!
 
 For this to work, Eclipse (or whatever IDE is run on) needs to have permission to control the mouse. In Mac this usually this means starting it from the terminal  (/Applications/Eclipse.app/Contents/MacOS/eclipse) and giving these permissions:
-Security & Privacy -> Screen Recording -> Eclipse
-Security & Privacy -> Automation -> Terminal
+- Security & Privacy -> Screen Recording -> Eclipse
+- Security & Privacy -> Automation -> Terminal
 
 
 
